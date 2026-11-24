@@ -1,4 +1,4 @@
-import { mkdirSync, writeFileSync } from "node:fs";
+import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 
 // One sentence pitching a friend who has never coded to let an AI agent
 // build their first app idea on make.fun.
@@ -23,3 +23,9 @@ if ([...LINE].length > 240 || LINE.includes("\n")) {
 
 mkdirSync("/output", { recursive: true });
 writeFileSync("/output/entry.txt", LINE, "utf8");
+
+// Post-write self-check: read the file back and confirm it holds exactly
+// the pitch — a partial write must fail loudly here, not at the gate.
+if (readFileSync("/output/entry.txt", "utf8") !== LINE) {
+  throw new Error("entry.txt does not match the pitch line");
+}
